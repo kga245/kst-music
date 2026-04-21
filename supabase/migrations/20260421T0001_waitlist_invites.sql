@@ -40,6 +40,9 @@ alter table public.invite_redemptions enable row level security;
 -- if the code is missing / exhausted. Runs as definer so the server-side
 -- service-role caller can invoke it; anon callers cannot because RLS has
 -- no public policies and there is no grant to anon.
+-- `uses_remaining` is both a column and an OUT parameter name — qualify every
+-- column reference with the `ic` alias so PL/pgSQL doesn't complain about
+-- ambiguity.
 create or replace function public.redeem_invite_code(
   p_code text,
   p_context jsonb default null
@@ -56,11 +59,11 @@ declare
   v_code_id uuid;
   v_remaining integer;
 begin
-  update public.invite_codes
-     set uses_remaining = uses_remaining - 1
-   where code = p_code
-     and uses_remaining > 0
-   returning id, uses_remaining
+  update public.invite_codes ic
+     set uses_remaining = ic.uses_remaining - 1
+   where ic.code = p_code
+     and ic.uses_remaining > 0
+   returning ic.id, ic.uses_remaining
         into v_code_id, v_remaining;
 
   if v_code_id is null then
