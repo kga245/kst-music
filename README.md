@@ -1,34 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# kst-music
 
-## Getting Started
+Making AI-generated music and sample creation more accessible, less mystifying, and more fun for producers.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, TypeScript strict)
+- **Vercel** (Fluid Compute — full Node.js runtime)
+- **Tailwind CSS 4**
+- **shadcn/ui** (to be added)
+- **AI SDK + Vercel AI Gateway** (to be added — model routing, provider fallbacks)
+- **Supabase** (to be added — auth + Postgres)
+- **Vercel Blob** (to be added — audio file storage)
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The placeholder API route [http://localhost:3000/api/hello](http://localhost:3000/api/hello) returns a JSON payload — use it to confirm the deploy pipeline end-to-end.
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Script       | What it does                       |
+| ------------ | ---------------------------------- |
+| `pnpm dev`   | Start Next.js dev server (Turbopack) |
+| `pnpm build` | Production build                   |
+| `pnpm start` | Serve the production build locally |
+| `pnpm lint`  | Run ESLint                         |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `main` → Vercel production
+- Every PR → Vercel preview URL
+- Runtime: Fluid Compute (Node.js). Do not use the deprecated Edge Runtime unless there's a specific reason.
 
-## Deploy on Vercel
+## Environment variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+None wired yet. As we add Supabase, AI Gateway, Blob, etc., document each required key here and add it to `.env.example`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Repo conventions
+
+- TypeScript strict mode is on — no `any` without a reason, no `@ts-ignore` without a comment.
+- App Router only. No Pages Router.
+- Keep `AGENTS.md` in sync if project conventions change — agents read it before writing code.
