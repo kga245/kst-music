@@ -9,6 +9,9 @@ export default function Home() {
       <p className="text-xs text-neutral-500">
         Pipeline check: <a className="underline" href="/api/hello">/api/hello</a>
       </p>
+      <p className="text-xs text-neutral-500">
+        Generate a clip: <a className="underline" href="/generate">/generate</a>
+      </p>
     </main>
   );
 }

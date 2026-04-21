@@ -40,7 +40,27 @@ The placeholder API route [http://localhost:3000/api/hello](http://localhost:300
 
 ## Environment variables
 
-None wired yet. As we add Supabase, AI Gateway, Blob, etc., document each required key here and add it to `.env.example`.
+Copy `.env.example` → `.env.local` and fill in:
+
+| Var                     | Required | What it's for                                                    |
+| ----------------------- | -------- | ---------------------------------------------------------------- |
+| `REPLICATE_API_TOKEN`   | yes      | Calls `meta/musicgen` on Replicate from `/generate`.             |
+| `BLOB_READ_WRITE_TOKEN` | yes      | Writes generated audio to the Vercel Blob store.                 |
+| `MUSICGEN_VARIANT`      | no       | Override musicgen variant. Default `stereo-melody-large`.        |
+
+For Vercel preview/production, add the same values via:
+
+```bash
+vercel env add REPLICATE_API_TOKEN production
+vercel env add BLOB_READ_WRITE_TOKEN production
+```
+
+## `/generate` — prompt-to-audio demo
+
+Internal alpha page. Enter a prompt + duration (5–30s), hit Generate, wait
+~20–40s, get an MP3 stored in Vercel Blob with a playable audio element and
+a download link. Every call emits one JSON log line (`event: music.generate`)
+to stdout so Vercel Logs / log drains can aggregate latency and cost.
 
 ## Repo conventions
 
