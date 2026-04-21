@@ -42,18 +42,34 @@ The placeholder API route [http://localhost:3000/api/hello](http://localhost:300
 
 Copy `.env.example` → `.env.local` and fill in:
 
-| Var                     | Required | What it's for                                                    |
-| ----------------------- | -------- | ---------------------------------------------------------------- |
-| `REPLICATE_API_TOKEN`   | yes      | Calls `meta/musicgen` on Replicate from `/generate`.             |
-| `BLOB_READ_WRITE_TOKEN` | yes      | Writes generated audio to the Vercel Blob store.                 |
-| `MUSICGEN_VARIANT`      | no       | Override musicgen variant. Default `stereo-melody-large`.        |
+| Var                             | Required | What it's for                                                    |
+| ------------------------------- | -------- | ---------------------------------------------------------------- |
+| `REPLICATE_API_TOKEN`           | yes      | Calls `meta/musicgen` on Replicate from `/generate`.             |
+| `BLOB_READ_WRITE_TOKEN`         | yes      | Writes generated audio to the Vercel Blob store.                 |
+| `MUSICGEN_VARIANT`              | no       | Override musicgen variant. Default `stereo-melody-large`.        |
+| `NEXT_PUBLIC_SUPABASE_URL`      | yes      | Supabase project URL. Used by waitlist + admin auth.             |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | yes      | Supabase anon key for magic-link admin auth.                     |
+| `SUPABASE_SERVICE_ROLE_KEY`     | yes      | Server-side writes to `waitlist_signups` / `invite_codes`.       |
+| `ADMIN_EMAILS`                  | yes      | Comma-separated allowlist of admin emails. Default `kga245@gmail.com`. |
+| `NEXT_PUBLIC_SITE_URL`          | no       | Canonical origin; used for magic-link redirects in prod.         |
+| `DEMO_AUDIO_URL`                | no       | Public URL of the pre-generated demo clip on the landing page.   |
 
-For Vercel preview/production, add the same values via:
+For Vercel preview/production, add values via:
 
 ```bash
 vercel env add REPLICATE_API_TOKEN production
 vercel env add BLOB_READ_WRITE_TOKEN production
+vercel env add NEXT_PUBLIC_SUPABASE_URL production
+vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production
+vercel env add SUPABASE_SERVICE_ROLE_KEY production
+vercel env add ADMIN_EMAILS production
 ```
+
+## Waitlist + invite codes (KST-5)
+
+- `/` — public landing page with pitch, optional demo audio, and waitlist email capture.
+- `/admin` — CEO-gated dashboard (magic-link auth + `ADMIN_EMAILS` allowlist) for issuing codes and watching signups.
+- Schema lives in `supabase/migrations/` — apply with `supabase db push --project-ref <ref>` or via the Supabase MCP `apply_migration`.
 
 ## `/generate` — prompt-to-audio demo
 
